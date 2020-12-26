@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  web:
+    build: ./frontend
+    ports:
+      - 3000:3000
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      DB_URL: "mongodb://demo:farm@database:27017/farm-demo"
+      DB_NAME: "farm-demo"
+    restart: always
+  database:
+    image: "mongo"
+    restart: always
+    volumes:
+      - "./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro"
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: demo
+      MONGO_INITDB_ROOT_PASSWORD: farm
+      MONGO_INITDB_DATABASE: farm-demo
